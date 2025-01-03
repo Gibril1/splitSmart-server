@@ -10,7 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from datetime import timedelta
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1z-5q4zke5%c)ju+n-(ml1*ad&j!8!0z)9e0kpjc#rdblg@&pk'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -41,7 +46,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
 
-    'users'
+    'users',
+    'groups'
 ]
 
 MIDDLEWARE = [
@@ -134,3 +140,18 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'users.User'
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+# Email Authentication
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+BASE_URL = 'http://127.0.0.1:8000/'

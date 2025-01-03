@@ -18,8 +18,14 @@ class Groups(models.Model):
 
 
 class GroupMembership(models.Model):
-    group = models.ForeignKey(Groups, on_delete=models.SET_NULL, null=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    ACCEPTANCE_STATUS = [
+        ('Pending', 'Pending'),
+        ('Rejected', 'Rejected'),
+        ('Accepted', 'Accepted'),
+    ]
+    group = models.ForeignKey(Groups, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    status = models.CharField(max_length=100, choices=ACCEPTANCE_STATUS, default='Pending')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
